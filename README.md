@@ -10,7 +10,12 @@ Windows 10 / 11 与 macOS 11+ 都有现成安装包。
 
 ## 下载
 
-安装包都在 **[Gitee Releases](https://gitee.com/mrpu2020/tokenbar-workbuddy/releases)**：
+安装包都在 **[Gitee Releases](https://gitee.com/mrpu2020/tokenbar-workbuddy/releases)**
+（国内访问更快）。GitHub 上是同样的文件：
+**[GitHub Releases](https://github.com/davey2026ch/tokenbar-workbuddy/releases)**，两边 sha256 一致。
+
+**注意**：程序内的自动更新只认 Gitee（见下面「自动更新」）；GitHub 仓库是代码与安装包的镜像，
+不参与更新。国内下载慢的时候才用 GitHub 那份。
 
 | 平台 | 文件 | 大小 |
 | --- | --- | --- |
@@ -133,6 +138,10 @@ Windows 10 / 11 与 macOS 11+ 都有现成安装包。
 | 底部 | 取消 / 确定 |
 
 ## 自动更新
+
+**更新只从 Gitee 取，与 GitHub 无关。** 程序查的是
+`https://gitee.com/api/v5/repos/mrpu2020/tokenbar-workbuddy/releases/latest`，
+GitHub 上的同名仓库只是代码与安装包的镜像——哪怕 GitHub 版更新得更早，程序也不会去那里拿。
 
 ![更新提示](docs/preview-update.png)
 
