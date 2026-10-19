@@ -1,0 +1,9 @@
+# 源码统一 LF 换行，避免 Windows 提交时被转成 CRLF
+* text=auto eol=lf
+
+# 二进制文件不做换行转换
+*.png binary
+*.exe binary
+*.ttf binary
+*.ttc binary
+*.zip binary

@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tokenbar UI 风格方案</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --page-bg: #f2f4f8;
+    --ink: #1a2332;
+    --ink-2: #5b6779;
+    --ink-3: #939dab;
+  }
+  body {
+    font-family: "Inter", "SF Pro Display", "Segoe UI Variable", "Segoe UI", "Microsoft YaHei", system-ui, sans-serif;
+    background: var(--page-bg);
+    color: var(--ink);
+    padding: 48px 40px 80px;
+    -webkit-font-smoothing: antialiased;
+  }
+  .num { font-variant-numeric: tabular-nums; font-feature-settings: "tnum"; letter-spacing: -0.01em; }
+
+  /* ---------------- 页面骨架 ---------------- */
+  header.page { max-width: 1080px; margin: 0 auto 40px; }
+  header.page h1 { font-size: 26px; font-weight: 700; letter-spacing: -0.02em; }
+  header.page p { margin-top: 10px; color: var(--ink-2); font-size: 14px; line-height: 1.8; }
+  header.page .fixes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 16px; }
+  .fix-tag {
+    font-size: 12px; color: #0d7a68; background: #e2f5f1;
+    border: 1px solid #bfe8df; padding: 4px 10px; border-radius: 999px;
+  }
+  section.option { max-width: 1080px; margin: 0 auto 64px; }
+  .option-head { display: flex; align-items: baseline; gap: 14px; margin-bottom: 8px; }
+  .option-head .badge {
+    font-size: 12px; font-weight: 700; color: #fff; background: #1a2332;
+    padding: 3px 10px; border-radius: 6px; letter-spacing: 0.05em;
+  }
+  .option-head h2 { font-size: 19px; font-weight: 700; letter-spacing: -0.01em; }
+  .option-desc { color: var(--ink-2); font-size: 13px; line-height: 1.8; margin-bottom: 22px; }
+  .stage {
+    border-radius: 16px; padding: 34px 34px; margin-bottom: 18px;
+    display: flex; flex-direction: column; gap: 26px; align-items: flex-start;
+  }
+  .stage.light { background: #e8ebf1; }
+  .stage.dark  { background: #1b2230; }
+  .stage-label { font-size: 11px; font-weight: 600; letter-spacing: 0.12em; color: var(--ink-3); text-transform: uppercase; }
+  .stage.dark .stage-label { color: #6b7688; }
+  .stage .row { display: flex; gap: 40px; align-items: center; flex-wrap: wrap; }
+
+  /* ================= 方案 A：仪表盘 ================= */
+  .a-bar {
+    position: relative; display: flex; align-items: stretch;
+    height: 78px; border-radius: 13px; overflow: hidden;
+  }
+  .a-bar.light { background: #ffffff; border: 1px solid rgba(15,23,42,.09); box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 10px 28px -12px rgba(15,23,42,.18); }
+  .a-bar.dark  { background: #11161f; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 1px 2px rgba(0,0,0,.3), 0 12px 32px -12px rgba(0,0,0,.6); }
+
+  .a-side {
+    display: flex; flex-direction: column; justify-content: center; gap: 9px;
+    padding: 0 16px 0 15px; flex: none;
+  }
+  .a-turn-tag {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11px; font-weight: 600; padding: 2.5px 9px; border-radius: 6px; width: fit-content;
+  }
+  .a-bar.light .a-turn-tag { color: #0b8a74; background: rgba(13,158,132,.1); }
+  .a-bar.dark  .a-turn-tag { color: #3be3c4; background: rgba(59,227,196,.12); }
+  .a-dot { width: 6px; height: 6px; border-radius: 50%; background: currentColor; animation: pulse 1.6s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity: 1; } 50% { opacity: .35; } }
+  .a-total-tag { font-size: 10.5px; padding-left: 1px; }
+  .a-bar.light .a-total-tag { color: #9aa3b2; }
+  .a-bar.dark  .a-total-tag { color: #5f6b7d; }
+
+  .a-metrics { display: flex; align-items: stretch; flex: 1; }
+  .a-col {
+    display: flex; flex-direction: column; justify-content: center;
+    padding: 0 22px; position: relative; min-width: 0;
+  }
+  .a-col + .a-col::before {
+    content: ""; position: absolute; left: 0; top: 17px; bottom: 17px; width: 1px;
+  }
+  .a-bar.light .a-col + .a-col::before { background: rgba(15,23,42,.07); }
+  .a-bar.dark  .a-col + .a-col::before { background: rgba(255,255,255,.07); }
+  .a-label { font-size: 9.5px; letter-spacing: 0.06em; margin-bottom: 5px; }
+  .a-bar.light .a-label { color: #9aa3b2; }
+  .a-bar.dark  .a-label { color: #66707f; }
+  .a-value { font-size: 16.5px; font-weight: 650; line-height: 1; }
+  .a-bar.light .a-value { color: #141b28; }
+  .a-bar.dark  .a-value { color: #e9eef6; }
+  .a-bar.light .a-value.hot { color: #0b8a74; }
+  .a-bar.dark  .a-value.hot { color: #3be3c4; }
+  .a-value .unit { font-size: 11px; font-weight: 500; margin-left: 1px; opacity: .65; }
+  .a-sub { font-size: 10.5px; margin-top: 5px; line-height: 1; }
+  .a-bar.light .a-sub { color: #9aa3b2; }
+  .a-bar.dark  .a-sub { color: #5f6b7d; }
+  .a-sub .pct { font-weight: 600; }
+  .a-bar.light .a-sub .pct { color: #4d7dd1; }
+  .a-bar.dark  .a-sub .pct { color: #6ba0ff; }
+
+  .a-btns {
+    flex: none; display: flex; flex-direction: column; justify-content: center; gap: 7px;
+    padding: 0 13px 0 4px; position: relative;
+  }
+  .a-btns::before { content: ""; position: absolute; left: -4px; top: 20px; bottom: 20px; width: 1px; }
+  .a-bar.light .a-btns::before { background: rgba(15,23,42,.08); }
+  .a-bar.dark  .a-btns::before { background: rgba(255,255,255,.08); }
+  .a-btn {
+    width: 24px; height: 24px; border-radius: 7px; display: grid; place-items: center;
+    cursor: pointer; transition: all .15s; border: 1px solid transparent;
+  }
+  .a-bar.light .a-btn { color: #9aa3b2; }
+  .a-bar.dark  .a-btn { color: #66707f; }
+  .a-bar.light .a-btn:hover { background: rgba(15,23,42,.06); color: #1a2332; border-color: rgba(15,23,42,.08); }
+  .a-bar.dark  .a-btn:hover { background: rgba(255,255,255,.08); color: #e9eef6; border-color: rgba(255,255,255,.1); }
+  .a-btn svg { width: 12px; height: 12px; }
+
+  /* ================= 方案 B：彩色胶囊 ================= */
+  .b-bar {
+    display: flex; align-items: center; height: 76px; border-radius: 38px;
+    padding: 0 10px 0 18px; gap: 8px;
+  }
+  .b-bar.light { background: #ffffff; border: 1px solid rgba(15,23,42,.08); box-shadow: 0 1px 2px rgba(15,23,42,.04), 0 10px 28px -12px rgba(15,23,42,.16); }
+  .b-bar.dark  { background: #141924; border: 1px solid rgba(255,255,255,.08); box-shadow: 0 12px 32px -12px rgba(0,0,0,.55); }
+  .b-id { flex: none; display: flex; flex-direction: column; gap: 3px; padding-right: 12px; margin-right: 2px; position: relative; }
+  .b-id::after { content: ""; position: absolute; right: 0; top: 6px; bottom: 6px; width: 1px; }
+  .b-bar.light .b-id::after { background: rgba(15,23,42,.08); }
+  .b-bar.dark  .b-id::after { background: rgba(255,255,255,.08); }
+  .b-id .t1 { font-size: 12px; font-weight: 700; display: flex; align-items: center; gap: 6px; }
+  .b-bar.light .b-id .t1 { color: #1a2332; }
+  .b-bar.dark  .b-id .t1 { color: #e9eef6; }
+  .b-id .t2 { font-size: 10px; }
+  .b-bar.light .b-id .t2 { color: #9aa3b2; }
+  .b-bar.dark  .b-id .t2 { color: #5f6b7d; }
+  .b-pill {
+    flex: 1; display: flex; flex-direction: column; justify-content: center;
+    height: 56px; border-radius: 28px; padding: 0 16px; min-width: 0;
+  }
+  .b-pill .lb { font-size: 9.5px; font-weight: 600; letter-spacing: 0.05em; margin-bottom: 3px; }
+  .b-pill .vl { font-size: 15px; font-weight: 700; line-height: 1; display: flex; align-items: baseline; gap: 5px; }
+  .b-pill .vl .sub { font-size: 10px; font-weight: 500; opacity: .55; }
+  .b-bar.light .b-pill .vl .sub { color: #5b6779; }
+  .b-bar.dark  .b-pill .vl .sub { color: #9aa7ba; }
+  .b-teal  .lb { color: #0b8a74; } .b-blue .lb { color: #3b6fd4; } .b-violet .lb { color: #7d5bd6; }
+  .b-pink  .lb { color: #d14482; } .b-amber .lb { color: #c07a14; } .b-slate .lb { color: #64748b; }
+  .b-bar.light .b-teal   { background: rgba(13,158,132,.09); }  .b-bar.light .b-teal .vl   { color: #0a6f60; }
+  .b-bar.light .b-blue   { background: rgba(59,111,212,.09); }  .b-bar.light .b-blue .vl   { color: #2f5cb8; }
+  .b-bar.light .b-violet { background: rgba(125,91,214,.09); }  .b-bar.light .b-violet .vl { color: #6847bd; }
+  .b-bar.light .b-pink   { background: rgba(209,68,130,.08); }  .b-bar.light .b-pink .vl   { color: #b5366d; }
+  .b-bar.light .b-amber  { background: rgba(192,122,20,.09); }  .b-bar.light .b-amber .vl  { color: #a06507; }
+  .b-bar.light .b-slate  { background: rgba(100,116,139,.09); } .b-bar.light .b-slate .vl  { color: #475569; }
+  .b-bar.dark .b-teal   { background: rgba(59,227,196,.1); }   .b-bar.dark .b-teal .vl   { color: #3be3c4; }
+  .b-bar.dark .b-blue   { background: rgba(107,160,255,.11); } .b-bar.dark .b-blue .vl   { color: #8ab2ff; }
+  .b-bar.dark .b-violet { background: rgba(168,132,255,.11); } .b-bar.dark .b-violet .vl { color: #b79aff; }
+  .b-bar.dark .b-pink   { background: rgba(255,138,190,.1); }  .b-bar.dark .b-pink .vl   { color: #ffa1ca; }
+  .b-bar.dark .b-amber  { background: rgba(240,180,94,.11); }  .b-bar.dark .b-amber .vl  { color: #f2c57c; }
+  .b-bar.dark .b-slate  { background: rgba(148,163,184,.1); }  .b-bar.dark .b-slate .vl  { color: #a8b4c6; }
+  .b-btns { flex: none; display: flex; flex-direction: column; gap: 6px; padding: 0 6px 0 8px; }
+  .b-btn {
+    width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; cursor: pointer; transition: all .15s;
+  }
+  .b-bar.light .b-btn { color: #9aa3b2; } .b-bar.light .b-btn:hover { background: rgba(15,23,42,.07); color: #1a2332; }
+  .b-bar.dark  .b-btn { color: #66707f; } .b-bar.dark  .b-btn:hover { background: rgba(255,255,255,.1); color: #e9eef6; }
+  .b-btn svg { width: 11px; height: 11px; }
+
+  /* ================= 方案 C：毛玻璃 ================= */
+  .c-stage-light {
+    background:
+      radial-gradient(560px 300px at 12% 0%, #ffd9e8 0%, transparent 60%),
+      radial-gradient(600px 340px at 88% 20%, #c7e0ff 0%, transparent 55%),
+      radial-gradient(500px 300px at 50% 110%, #d3f5ec 0%, transparent 55%),
+      #eef1f6 !important;
+  }
+  .c-stage-dark {
+    background:
+      radial-gradient(560px 300px at 10% 0%, #3a2a52 0%, transparent 60%),
+      radial-gradient(640px 340px at 90% 10%, #1d3a5c 0%, transparent 55%),
+      radial-gradient(520px 320px at 45% 115%, #123f3a 0%, transparent 55%),
+      #141824 !important;
+  }
+  .c-bar {
+    display: flex; align-items: center; height: 80px; border-radius: 16px;
+    padding: 0 14px 0 18px; gap: 4px;
+    backdrop-filter: blur(20px) saturate(1.5); -webkit-backdrop-filter: blur(20px) saturate(1.5);
+  }
+  .c-bar.light { background: rgba(255,255,255,.55); border: 1px solid rgba(255,255,255,.8); box-shadow: 0 1px 0 rgba(255,255,255,.9) inset, 0 16px 40px -14px rgba(31,45,74,.35); }
+  .c-bar.dark  { background: rgba(22,27,40,.55); border: 1px solid rgba(255,255,255,.14); box-shadow: 0 1px 0 rgba(255,255,255,.08) inset, 0 16px 40px -14px rgba(0,0,0,.6); }
+  .c-id { flex: none; padding-right: 16px; margin-right: 6px; position: relative; display: flex; flex-direction: column; gap: 4px; }
+  .c-id::after { content: ""; position: absolute; right: 0; top: 8px; bottom: 8px; width: 1px; }
+  .c-bar.light .c-id::after { background: rgba(15,23,42,.1); }
+  .c-bar.dark  .c-id::after { background: rgba(255,255,255,.12); }
+  .c-id .t1 { font-size: 13px; font-weight: 700; display: flex; gap: 7px; align-items: center; }
+  .c-bar.light .c-id .t1 { color: #1a2332; } .c-bar.dark .c-id .t1 { color: #eef2f9; }
+  .c-id .t2 { font-size: 10px; }
+  .c-bar.light .c-id .t2 { color: #8a94a5; } .c-bar.dark .c-id .t2 { color: #77839a; }
+  .c-metrics { display: flex; flex: 1; align-items: center; }
+  .c-col { flex: 1; padding: 0 14px; display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+  .c-col .lb {
+    font-size: 9px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .c-bar.light .c-col .lb { color: #97a0b1; } .c-bar.dark .c-col .lb { color: #7b87a0; }
+  .c-col .tick { width: 8px; height: 2px; border-radius: 1px; background: currentColor; opacity: .5; }
+  .c-col .vl { font-size: 19px; font-weight: 700; line-height: 1; letter-spacing: -0.02em; display: flex; align-items: baseline; gap: 6px; }
+  .c-bar.light .c-col .vl { color: #131a26; } .c-bar.dark .c-col .vl { color: #f0f4fb; }
+  .c-col .vl .sub { font-size: 10px; font-weight: 600; }
+  .c-bar.light .c-col .vl .sub { color: #8a94a5; } .c-bar.dark .c-col .vl .sub { color: #77839a; }
+  .c-col .vl.live {
+    background: linear-gradient(100deg, #0b9e83, #2f6fe0);
+    -webkit-background-clip: text; background-clip: text; color: transparent !important;
+  }
+  .c-bar.dark .c-col .vl.live {
+    background: linear-gradient(100deg, #3be3c4, #6ba0ff);
+    -webkit-background-clip: text; background-clip: text;
+  }
+  .c-btns { flex: none; display: flex; flex-direction: column; gap: 6px; padding-left: 10px; }
+  .c-btn {
+    width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center; cursor: pointer; transition: all .15s;
+  }
+  .c-bar.light .c-btn { color: #8a94a5; background: rgba(255,255,255,.5); border: 1px solid rgba(15,23,42,.06); }
+  .c-bar.light .c-btn:hover { color: #1a2332; background: #fff; }
+  .c-bar.dark .c-btn { color: #77839a; background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.08); }
+  .c-bar.dark .c-btn:hover { color: #f0f4fb; background: rgba(255,255,255,.12); }
+  .c-btn svg { width: 11px; height: 11px; }
+
+  /* ================= 设置窗口 ================= */
+  .s-wrap { display: flex; gap: 40px; align-items: flex-start; flex-wrap: wrap; }
+  .s-win {
+    width: 420px; border-radius: 12px; overflow: hidden;
+    background: #f7f8fa; border: 1px solid rgba(15,23,42,.1);
+    box-shadow: 0 24px 60px -20px rgba(15,23,42,.35);
+    font-size: 13px;
+  }
+  .s-titlebar {
+    height: 40px; display: flex; align-items: center; gap: 8px; padding: 0 14px;
+    background: #fff; border-bottom: 1px solid rgba(15,23,42,.07);
+    font-weight: 600; font-size: 12.5px; color: #1a2332;
+  }
+  .s-titlebar .tl-btns { margin-left: auto; display: flex; gap: 14px; color: #9aa3b2; font-size: 12px; }
+  .s-body { padding: 20px 20px 16px; }
+  .s-sec { margin-bottom: 22px; }
+  .s-sec-t {
+    font-size: 10.5px; font-weight: 700; letter-spacing: 0.1em; color: #9aa3b2;
+    text-transform: uppercase; margin-bottom: 10px;
+  }
+  .s-seg {
+    display: flex; background: #eceef2; border-radius: 10px; padding: 3px; gap: 2px;
+  }
+  .s-seg div {
+    flex: 1; text-align: center; padding: 7px 0; border-radius: 8px; font-size: 12.5px;
+    color: #5b6779; cursor: pointer; font-weight: 500; transition: all .15s;
+  }
+  .s-seg div.on { background: #fff; color: #0b8a74; font-weight: 650; box-shadow: 0 1px 3px rgba(15,23,42,.12); }
+  .s-layouts { display: flex; gap: 12px; }
+  .s-lay {
+    flex: 1; border: 1.5px solid rgba(15,23,42,.1); border-radius: 12px; padding: 14px 12px 10px;
+    cursor: pointer; background: #fff; transition: all .15s; text-align: center;
+  }
+  .s-lay.on { border-color: #0d9e85; background: rgba(13,158,132,.05); }
+  .s-lay .thumb { height: 44px; border-radius: 7px; background: #eceef2; margin-bottom: 9px; position: relative; overflow: hidden; }
+  .s-lay.on .thumb { background: #d7efe9; }
+  .s-lay .thumb i { position: absolute; border-radius: 2px; background: #b8c0cd; height: 4px; }
+  .s-lay.on .thumb i { background: #4fbfae; }
+  .s-lay span { font-size: 12px; color: #5b6779; font-weight: 550; }
+  .s-lay.on span { color: #0b8a74; font-weight: 650; }
+  .s-follow {
+    display: flex; align-items: center; gap: 12px; background: #fff;
+    border: 1px solid rgba(15,23,42,.08); border-radius: 12px; padding: 13px 14px;
+  }
+  .s-follow .tx { flex: 1; }
+  .s-follow .tx b { display: block; font-size: 13px; color: #1a2332; margin-bottom: 2px; }
+  .s-follow .tx small { color: #9aa3b2; font-size: 11.5px; }
+  .s-switch { width: 40px; height: 24px; border-radius: 12px; background: #0d9e85; position: relative; flex: none; }
+  .s-switch::after {
+    content: ""; position: absolute; width: 18px; height: 18px; border-radius: 50%;
+    background: #fff; top: 3px; right: 3px; box-shadow: 0 1px 3px rgba(0,0,0,.25);
+  }
+  .s-mhead { display: flex; align-items: baseline; margin-bottom: 4px; }
+  .s-mhead .cnt { font-size: 11px; color: #0b8a74; font-weight: 650; margin-left: 8px; background: rgba(13,158,132,.1); padding: 1px 8px; border-radius: 999px; }
+  .s-mhead .reset { margin-left: auto; font-size: 11.5px; color: #4d7dd1; cursor: pointer; }
+  .s-mrow {
+    display: flex; align-items: center; gap: 11px; padding: 9px 4px;
+    border-bottom: 1px solid rgba(15,23,42,.05);
+  }
+  .s-mrow:last-child { border-bottom: none; }
+  .s-grip { color: #c3cad5; cursor: grab; letter-spacing: 2px; font-size: 11px; }
+  .s-mrow .nm { flex: 1; color: #2a3444; font-size: 13px; }
+  .s-check {
+    width: 20px; height: 20px; border-radius: 50%; background: #0d9e85; color: #fff;
+    display: grid; place-items: center; font-size: 11px; cursor: pointer; flex: none;
+  }
+  .s-check.off { background: transparent; border: 1.5px solid #cbd2dc; color: transparent; }
+  .s-foot {
+    display: flex; align-items: center; padding: 14px 20px; background: #fff;
+    border-top: 1px solid rgba(15,23,42,.07);
+  }
+  .s-foot small { color: #9aa3b2; font-size: 11px; }
+  .s-foot .btns { margin-left: auto; display: flex; gap: 10px; }
+  .s-foot .btns button {
+    font-family: inherit; border: none; border-radius: 9px; padding: 8px 22px;
+    font-size: 12.5px; font-weight: 600; cursor: pointer;
+  }
+  .s-foot .cancel { background: #eceef2; color: #5b6779; }
+  .s-foot .ok { background: #0d9e85; color: #fff; box-shadow: 0 4px 12px -4px rgba(13,158,132,.5); }
+
+  .s-note { max-width: 420px; color: var(--ink-2); font-size: 13px; line-height: 2; }
+  .s-note b { color: var(--ink); }
+  .s-note ul { padding-left: 18px; }
+
+  footer { max-width: 1080px; margin: 0 auto; color: var(--ink-3); font-size: 12.5px; line-height: 1.9; border-top: 1px solid #dde1e8; padding-top: 20px; }
+</style>
+</head>
+<body>
+
+<header class="page">
+  <h1>Tokenbar 界面风格方案</h1>
+  <p>三套候选风格，每套都展示浅色 / 深色两种外观。数据用的是真实场景（含缓存命中率和累计行），方便对比效果。</p>
+  <div class="fixes">
+    <span class="fix-tag">✓ 标签与数值分层，不再挤在一起</span>
+    <span class="fix-tag">✓ 右侧按钮独立分区，缓存有值也不重叠</span>
+    <span class="fix-tag">✓ 数字统一表格数字（等宽对齐）</span>
+    <span class="fix-tag">✓ 每列顶部一个标签，本轮/累计共用，不再重复</span>
+  </div>
+</header>
+
+<!-- ================= 方案 A ================= -->
+<section class="option">
+  <div class="option-head"><span class="badge">方案 A</span><h2>仪表盘 · 简约克制（推荐）</h2></div>
+  <p class="option-desc">去掉彩虹线，黑白灰为主、一个青色点缀。每列「小标签 → 大数字 → 灰色累计值」三层结构，列与列之间细分隔线。速度在生成中时用点缀色高亮。信息密度高但一眼能定位。</p>
+
+  <div class="stage light">
+    <div class="row"><span class="stage-label">浅色 · 横排</span></div>
+    <div class="a-bar light" style="width: 980px;">
+      <div class="a-side">
+        <span class="a-turn-tag"><span class="a-dot"></span>本轮</span>
+        <span class="a-total-tag num">累计 · 4 轮</span>
+      </div>
+      <div class="a-metrics">
+        <div class="a-col"><span class="a-label">首字</span><span class="a-value num">2.25<span class="unit">s</span></span><span class="a-sub num">1.23s</span></div>
+        <div class="a-col"><span class="a-label">耗时</span><span class="a-value num">29<span class="unit">m</span>06<span class="unit">s</span></span><span class="a-sub num">1h59m</span></div>
+        <div class="a-col"><span class="a-label">速度</span><span class="a-value hot num">280<span class="unit">/s</span></span><span class="a-sub num">271/s</span></div>
+        <div class="a-col"><span class="a-label">输入</span><span class="a-value num">37.07<span class="unit">M</span></span><span class="a-sub num">207.01M</span></div>
+        <div class="a-col"><span class="a-label">输出</span><span class="a-value num">125<span class="unit">K</span></span><span class="a-sub num">525K</span></div>
+        <div class="a-col"><span class="a-label">缓存</span><span class="a-value num">18.4<span class="unit">M</span></span><span class="a-sub num"><span class="pct">92%</span> · 96M</span></div>
+      </div>
+      <div class="a-btns">
+        <div class="a-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="a-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage dark">
+    <div class="row"><span class="stage-label">深色 · 横排</span></div>
+    <div class="a-bar dark" style="width: 980px;">
+      <div class="a-side">
+        <span class="a-turn-tag"><span class="a-dot"></span>本轮</span>
+        <span class="a-total-tag num">累计 · 4 轮</span>
+      </div>
+      <div class="a-metrics">
+        <div class="a-col"><span class="a-label">首字</span><span class="a-value num">2.25<span class="unit">s</span></span><span class="a-sub num">1.23s</span></div>
+        <div class="a-col"><span class="a-label">耗时</span><span class="a-value num">29<span class="unit">m</span>06<span class="unit">s</span></span><span class="a-sub num">1h59m</span></div>
+        <div class="a-col"><span class="a-label">速度</span><span class="a-value hot num">280<span class="unit">/s</span></span><span class="a-sub num">271/s</span></div>
+        <div class="a-col"><span class="a-label">输入</span><span class="a-value num">37.07<span class="unit">M</span></span><span class="a-sub num">207.01M</span></div>
+        <div class="a-col"><span class="a-label">输出</span><span class="a-value num">125<span class="unit">K</span></span><span class="a-sub num">525K</span></div>
+        <div class="a-col"><span class="a-label">缓存</span><span class="a-value num">18.4<span class="unit">M</span></span><span class="a-sub num"><span class="pct">92%</span> · 96M</span></div>
+      </div>
+      <div class="a-btns">
+        <div class="a-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="a-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 方案 B ================= -->
+<section class="option">
+  <div class="option-head"><span class="badge">方案 B</span><h2>彩色胶囊 · 活泼分区</h2></div>
+  <p class="option-desc">整个条形变成一颗大胶囊，每个指标是独立彩色小胶囊，颜色区分指标类型（首字青、耗时蓝、速度紫、输入粉、输出橙、缓存灰）。累计值缩成小字跟在主值后面。最活泼，但占宽最大。</p>
+
+  <div class="stage light">
+    <div class="row"><span class="stage-label">浅色 · 横排</span></div>
+    <div class="b-bar light" style="width: 1000px;">
+      <div class="b-id">
+        <span class="t1"><span class="a-dot" style="color:#0b8a74;"></span>本轮</span>
+        <span class="t2 num">累计 · 4 轮</span>
+      </div>
+      <div class="b-pill b-teal"><span class="lb">首字</span><span class="vl num">2.25s<span class="sub">1.23s</span></span></div>
+      <div class="b-pill b-blue"><span class="lb">耗时</span><span class="vl num">29m06s<span class="sub">1h59m</span></span></div>
+      <div class="b-pill b-violet"><span class="lb">速度</span><span class="vl num">280/s<span class="sub">271/s</span></span></div>
+      <div class="b-pill b-pink"><span class="lb">输入</span><span class="vl num">37.07M<span class="sub">207M</span></span></div>
+      <div class="b-pill b-amber"><span class="lb">输出</span><span class="vl num">125K<span class="sub">525K</span></span></div>
+      <div class="b-pill b-slate"><span class="lb">缓存</span><span class="vl num">18.4M<span class="sub">92%</span></span></div>
+      <div class="b-btns">
+        <div class="b-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="b-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage dark">
+    <div class="row"><span class="stage-label">深色 · 横排</span></div>
+    <div class="b-bar dark" style="width: 1000px;">
+      <div class="b-id">
+        <span class="t1"><span class="a-dot" style="color:#3be3c4;"></span>本轮</span>
+        <span class="t2 num">累计 · 4 轮</span>
+      </div>
+      <div class="b-pill b-teal"><span class="lb">首字</span><span class="vl num">2.25s<span class="sub">1.23s</span></span></div>
+      <div class="b-pill b-blue"><span class="lb">耗时</span><span class="vl num">29m06s<span class="sub">1h59m</span></span></div>
+      <div class="b-pill b-violet"><span class="lb">速度</span><span class="vl num">280/s<span class="sub">271/s</span></span></div>
+      <div class="b-pill b-pink"><span class="lb">输入</span><span class="vl num">37.07M<span class="sub">207M</span></span></div>
+      <div class="b-pill b-amber"><span class="lb">输出</span><span class="vl num">125K<span class="sub">525K</span></span></div>
+      <div class="b-pill b-slate"><span class="lb">缓存</span><span class="vl num">18.4M<span class="sub">92%</span></span></div>
+      <div class="b-btns">
+        <div class="b-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="b-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 方案 C ================= -->
+<section class="option">
+  <div class="option-head"><span class="badge">方案 C</span><h2>毛玻璃 · macOS 质感</h2></div>
+  <p class="option-desc">半透明磨砂底（背景垫了彩色渐变方便看出模糊效果），大写字母式小标签 + 加大号数字，生成中的速度用青蓝渐变色。最「贵气」，但依赖系统透明效果，Windows 上是纯色近似模拟。</p>
+
+  <div class="stage light c-stage-light">
+    <div class="row"><span class="stage-label">浅色 · 横排</span></div>
+    <div class="c-bar light" style="width: 1000px;">
+      <div class="c-id">
+        <span class="t1"><span class="a-dot" style="color:#0b9e83;"></span>本轮</span>
+        <span class="t2 num">累计 · 4 轮</span>
+      </div>
+      <div class="c-metrics">
+        <div class="c-col"><span class="lb"><span class="tick"></span>首字</span><span class="vl num">2.25s<span class="sub">1.23s</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>耗时</span><span class="vl num">29m06s<span class="sub">1h59m</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>速度</span><span class="vl live num">280/s<span class="sub">271/s</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>输入</span><span class="vl num">37.07M<span class="sub">207M</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>输出</span><span class="vl num">125K<span class="sub">525K</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>缓存</span><span class="vl num">18.4M<span class="sub">92%</span></span></div>
+      </div>
+      <div class="c-btns">
+        <div class="c-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="c-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stage dark c-stage-dark">
+    <div class="row"><span class="stage-label">深色 · 横排</span></div>
+    <div class="c-bar dark" style="width: 1000px;">
+      <div class="c-id">
+        <span class="t1"><span class="a-dot" style="color:#3be3c4;"></span>本轮</span>
+        <span class="t2 num">累计 · 4 轮</span>
+      </div>
+      <div class="c-metrics">
+        <div class="c-col"><span class="lb"><span class="tick"></span>首字</span><span class="vl num">2.25s<span class="sub">1.23s</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>耗时</span><span class="vl num">29m06s<span class="sub">1h59m</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>速度</span><span class="vl live num">280/s<span class="sub">271/s</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>输入</span><span class="vl num">37.07M<span class="sub">207M</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>输出</span><span class="vl num">125K<span class="sub">525K</span></span></div>
+        <div class="c-col"><span class="lb"><span class="tick"></span>缓存</span><span class="vl num">18.4M<span class="sub">92%</span></span></div>
+      </div>
+      <div class="c-btns">
+        <div class="c-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M2 2l8 8M10 2l-8 8"/></svg></div>
+        <div class="c-btn"><svg viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M2 3.5h8M2 6h8M2 8.5h8"/><circle cx="4.5" cy="3.5" r="1.3" fill="currentColor" stroke="none"/><circle cx="8" cy="6" r="1.3" fill="currentColor" stroke="none"/><circle cx="3.5" cy="8.5" r="1.3" fill="currentColor" stroke="none"/></svg></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 设置窗口 ================= -->
+<section class="option">
+  <div class="option-head"><span class="badge">通用</span><h2>设置窗口新版式</h2></div>
+  <p class="option-desc">无论选哪套条形风格，设置窗口都建议改成这个更清爽的版本。改动点见右侧说明。</p>
+  <div class="stage light">
+    <div class="s-wrap">
+      <div class="s-win">
+        <div class="s-titlebar">
+          <span style="width:16px;height:16px;border-radius:4px;background:#1a2332;display:inline-grid;place-items:center;color:#3be3c4;font-size:9px;">≡</span>
+          Tokenbar 设置
+          <span class="tl-btns">— ▢ ✕</span>
+        </div>
+        <div class="s-body">
+          <div class="s-sec">
+            <div class="s-sec-t">外观</div>
+            <div class="s-seg"><div class="on">跟随系统</div><div>深色</div><div>浅色</div></div>
+          </div>
+          <div class="s-sec">
+            <div class="s-sec-t">布局</div>
+            <div class="s-layouts">
+              <div class="s-lay on">
+                <div class="thumb">
+                  <i style="left:8px;top:9px;width:52px;"></i><i style="left:66px;top:9px;width:40px;"></i><i style="left:112px;top:9px;width:46px;"></i>
+                  <i style="left:8px;top:26px;width:46px;"></i><i style="left:60px;top:26px;width:52px;"></i><i style="left:118px;top:26px;width:34px;"></i>
+                </div>
+                <span>横排（两行）</span>
+              </div>
+              <div class="s-lay">
+                <div class="thumb">
+                  <i style="left:10px;top:8px;width:20px;"></i><i style="left:36px;top:8px;width:34px;"></i>
+                  <i style="left:10px;top:20px;width:20px;"></i><i style="left:36px;top:20px;width:28px;"></i>
+                  <i style="left:10px;top:32px;width:20px;"></i><i style="left:36px;top:32px;width:38px;"></i>
+                </div>
+                <span>竖排（两列）</span>
+              </div>
+            </div>
+          </div>
+          <div class="s-sec">
+            <div class="s-sec-t">行为</div>
+            <div class="s-follow">
+              <div class="tx"><b>跟随 WorkBuddy 显示</b><small>切到其它应用时自动隐身，回来再出现</small></div>
+              <div class="s-switch"></div>
+            </div>
+          </div>
+          <div class="s-sec" style="margin-bottom:6px;">
+            <div class="s-mhead">
+              <span class="s-sec-t" style="margin:0;">指标</span><span class="cnt">6 / 6</span>
+              <span class="reset">恢复默认</span>
+            </div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">首字延迟</span><span class="s-check">✓</span></div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">响应耗时</span><span class="s-check">✓</span></div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">输出速度</span><span class="s-check">✓</span></div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">输入 Tokens</span><span class="s-check">✓</span></div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">输出 Tokens</span><span class="s-check">✓</span></div>
+            <div class="s-mrow"><span class="s-grip">⋮⋮</span><span class="nm">缓存命中</span><span class="s-check off">✓</span></div>
+          </div>
+        </div>
+        <div class="s-foot">
+          <small>改动会立刻显示在 Tokenbar 上 · v1.4.0</small>
+          <div class="btns"><button class="cancel">取消</button><button class="ok">确定</button></div>
+        </div>
+      </div>
+      <div class="s-note">
+        <b>设置窗口改了什么：</b>
+        <ul>
+          <li><b>分组标题</b>改成小号大写灰字，段落感更强</li>
+          <li><b>外观分段控件</b>改为圆角胶囊式，选中态浮起</li>
+          <li><b>跟随开关</b>收进一张卡片里，说明文字更紧凑</li>
+          <li><b>指标行</b>用细分隔线代替大行距，勾选改成圆点（未选是空心圈），数量做成小徽章</li>
+          <li><b>确定按钮</b>带一点投影，主次更分明</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  说明：三套方案里「本轮 / 累计·4 轮」都固定在最左侧只出现一次，每列顶部一个指标名、中间大数字是本轮、下面灰色小字是累计——这就是解决「标签和值挤在一起」和「标签重复」的办法。最右一列和按钮之间始终保留独立分区，缓存有值（含 92% 命中率后缀）也不会顶到关闭/设置按钮。竖排两列版式会跟随你选定的风格做同样的语言。
+</footer>
+
+</body>
+</html>

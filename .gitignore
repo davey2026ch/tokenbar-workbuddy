@@ -1,0 +1,25 @@
+# Rust 编译中间产物
+/target
+
+# 发布产物：dist/Tokenbar.exe 随 Release 分发，不进仓库
+/dist
+
+# 开发脚本的假数据、临时运行目录与截图
+/tools/.cache
+/tools/*.png
+/tools/dbg.txt
+
+# Python
+__pycache__/
+*.pyc
+
+# 运行时在 exe 同目录自己生成的文件（tokenbar.ini 不再随包分发）
+*.ini
+*.log
+*.wake
+tokenbar-stats.json
+tokenbar-update.json
+*.exe.new
+
+# 本机代理工作目录（记忆、备份、临时截图等）
+/.workbuddy
